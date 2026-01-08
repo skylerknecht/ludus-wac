@@ -14,10 +14,6 @@ ludus:
       role: primary-dc
     roles:
       - disable_firewall
-      - dc01
-    role_vars:
-      forest_functional_level: Win2016
-      domain_functional_level: Win2016
 
   - vm_name: "{{ range_id }}-HV01"
     hostname: "HV01"
@@ -52,3 +48,16 @@ ludus:
     roles:
       - disable_firewall
       - wac01
+
+defaults:
+  ad_domain_admin: domainadmin
+  ad_domain_admin_password: Password123
+  ad_domain_user: domainuser
+  ad_domain_user_password: Password123
+  ad_domain_safe_mode_password: Password123
+  ad_domain_functional_level: WinThreshold
+  ad_forest_functional_level: WinThreshold
+  timezone: America/New_York
+  snapshot_with_RAM: false
+  stale_hours: 24
+  enable_dynamic_wallpaper: true
