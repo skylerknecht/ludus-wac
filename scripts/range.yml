@@ -1,0 +1,51 @@
+name: wac-vmode-2025
+description: WAC Virtualization Mode (vMode) fabric on Server 2025
+
+network:
+  subnet: 192.168.56.0/24
+  gateway: 192.168.56.1
+  dns: 192.168.56.10
+
+domain:
+  name: lab.local
+  netbios: LAB
+
+vms:
+  - name: dc01
+    hostname: dc01
+    template: win2025-server-x64-template
+    ip: 192.168.56.10
+    cpu: 4
+    memory: 8192
+    role: domain-controller
+    scripts:
+      - scripts/common/baseline.ps1
+      - scripts/dc/promote-dc.ps1
+
+  - name: hv01
+    hostname: hv01
+    template: win2025-server-x64-template
+    ip: 192.168.56.21
+    cpu: 8
+    memory: 16384
+    role: hyperv-host
+    scripts:
+      - scripts/common/baseline.ps1
+      - scripts/hyperv/join-domain.ps1
+      - scripts/hyperv/install-hyperv.ps1
+      - scripts/hyperv/create-vswitch.ps1
+      - scripts/wac/prep-host-for-vmode.ps1
+
+  - name: hv02
+    hostname: hv02
+    template: win2025-server-x64-template
+    ip: 192.168.56.22
+    cpu: 8
+    memory: 16384
+    role: hyperv-host
+    scripts:
+      - scripts/common/baseline.ps1
+      - scripts/hyperv/join-domain.ps1
+      - scripts/hyperv/install-hyperv.ps1
+      - scripts/hyperv/create-vswitch.ps1
+      - scripts/wac/prep-host-for-vmode.ps1
