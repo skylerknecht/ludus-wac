@@ -1,0 +1,42 @@
+---
+- name: Wait for DC DNS to be resolvable
+  ansible.windows.win_shell: |
+    $dc="{{ dc_fqdn }}"
+    for ($i=0; $i -lt 90; $i++) {
+      try {
+        Resolve-DnsName $dc -ErrorAction Stop | Out-Null
+        exit 0
+      } catch {
+        Start-Sleep -Seconds 10
+      }
+    }
+    throw "DC DNS not ready: $dc"
+
+- name: Wait for DC LDAP/Kerberos to be reachable
+  ansible.windows.win_shell: |
+    $dc="{{ dc_fqdn }}"
+    $ports=@(53,88,389)
+    foreach ($p in $ports) {
+      $ok=$false
+      for ($i=0; $i -lt 90; $i++) {
+        try {
+          $t = Test-NetConnection -ComputerName $dc -Port $p -WarningAction SilentlyContinue
+          if ($t.TcpTestSucceeded) { $ok=$true; break }
+        } catch {}
+        Start-Sleep -Seconds 5
+      }
+      if (-not $ok) { throw "DC port $p not reachable on $dc" }
+    }
+
+- name: Join domain (idempotent)
+  ansible.windows.win_domain_membership:
+    dns_domain_name: "{{ domain_fqdn }}"
+    domain_admin_user: "{{ domain_join_user }}"
+    domain_admin_password: "{{ domain_join_password }}"
+    state: domain
+  register: join_state
+
+- name: Reboot after join if required
+  ansible.windows.win_reboot:
+    reboot_timeout: 1800
+  when: join_state.reboot_required

@@ -19,7 +19,7 @@ ludus:
     role_vars:
       wac_domain_fqdn: ludus.local
       wac_domain_netbios: LUDUS
-      wac_safe_mode_password: Password123!
+      wac_safe_mode_password: "Password123!"
 
   - vm_name: "{{ range_id }}-wac-wac01"
     hostname: "WAC-WAC01"
@@ -35,7 +35,13 @@ ludus:
       role: member
     roles:
       - ludus_wac_common
+      - ludus_wac_join_domain
       - ludus_wac_wac
+    role_vars:
+      dc_fqdn: "WAC-DC01.ludus.local"
+      domain_fqdn: "ludus.local"
+      domain_join_user: "LUDUS\\Administrator"
+      domain_join_password: "Password123!"
 
   - vm_name: "{{ range_id }}-wac-hv01"
     hostname: "WAC-HV01"
@@ -51,7 +57,12 @@ ludus:
       role: member
     roles:
       - ludus_wac_common
+      - ludus_wac_join_domain
       - ludus_wac_hyperv
     role_vars:
-      hv_vswitch_name: vSwitch
-      hv_vswitch_adapter_name: Ethernet
+      dc_fqdn: "WAC-DC01.ludus.local"
+      domain_fqdn: "ludus.local"
+      domain_join_user: "LUDUS\\Administrator"
+      domain_join_password: "Password123!"
+      hv_vswitch_name: "vSwitch"
+      hv_vswitch_adapter_name: "Ethernet"
