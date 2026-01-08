@@ -1,7 +1,0 @@
-domain_admin_user: Administrator
-domain_admin_password: Password123!
-
-safe_mode_password: DSRMPassword123!
-
-# vSwitch name used on Hyper-V hosts
-hyperv_vswitch_name: vSwitch

@@ -1,7 +1,10 @@
-$sw = $env:HYPERV_VSWITCH_NAME
-if (-not $sw) { $sw = "vSwitch" }
+param(
+  [string]$Name = "vSwitch"
+)
 
-# Create an internal vSwitch for lab traffic (simple + reliable in nested scenarios)
-if (-not (Get-VMSwitch -Name $sw -ErrorAction SilentlyContinue)) {
-  New-VMSwitch -Name $sw -SwitchType Internal | Out-Null
+# Internal is easiest for nested/lab. External is fine too, but requires real uplink.
+if (-not (Get-VMSwitch -Name $Name -ErrorAction SilentlyContinue)) {
+  New-VMSwitch -Name $Name -SwitchType Internal | Out-Null
 }
+
+Get-VMSwitch -Name $Name | Format-List Name,SwitchType
