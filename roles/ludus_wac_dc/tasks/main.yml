@@ -1,1 +1,7 @@
-Install-WindowsFeature AD-Domain-Services
+- name: Promote server to domain controller
+  ansible.windows.win_shell: |
+    Import-Module ADDSDeployment
+    Install-ADDSForest `
+      -DomainName "ludus.local" `
+      -SafeModeAdministratorPassword (ConvertTo-SecureString "password" -AsPlainText -Force) `
+      -Force

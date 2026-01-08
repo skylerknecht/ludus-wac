@@ -1,1 +1,8 @@
-Enable-PSRemoting -Force
+- name: Enable PSRemoting
+  ansible.windows.win_shell: |
+    Enable-PSRemoting -Force
+
+- name: Enable WinRM firewall rules
+  ansible.windows.win_firewall_rule:
+    group: "Windows Remote Management"
+    enabled: yes
