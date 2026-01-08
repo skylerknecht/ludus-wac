@@ -15,6 +15,9 @@ ludus:
     roles:
       - disable_firewall
       - dc01
+    role_vars:
+      forest_functional_level: Win2016
+      domain_functional_level: Win2016
 
   - vm_name: "{{ range_id }}-HV01"
     hostname: "HV01"
