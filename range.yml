@@ -1,20 +1,21 @@
-range:
-  name: ludus-wac
-  network:
-    cidr: 10.2.0.0/16
+ludus:
+  range:
+    name: ludus-wac
+    network:
+      cidr: 10.2.0.0/16
 
-machines:
-  - name: dc01
-    template: win2025-server-x64-tpm
-    ip: 10.2.10.10
-    roles: [dc]
+  machines:
+    - name: dc01
+      template: win2025-server-x64-tpm
+      ip: 10.2.10.10
+      roles: [dc]
 
-  - name: wac01
-    template: win2025-server-x64-tpm
-    ip: 10.2.10.11
-    roles: [wac]
+    - name: wac01
+      template: win2025-server-x64-tpm
+      ip: 10.2.10.11
+      roles: [wac]
 
-  - name: hv01
-    template: win2025-server-x64-tpm
-    ip: 10.2.10.21
-    roles: [hyperv]
+    - name: hv01
+      template: win2025-server-x64-tpm
+      ip: 10.2.10.21
+      roles: [hyperv]
