@@ -5,27 +5,13 @@
     path: C:\Temp
     state: directory
 
-- name: Install Visual C++ Redistributable (required)
-  ansible.windows.win_shell: |
-    winget install Microsoft.VCRedist.2015+.x64 --silent --accept-package-agreements --accept-source-agreements
-  args:
-    creates: C:\Program Files (x86)\Microsoft Visual Studio\2015\VC
-
-# --- Download WAC Virtualization Mode Preview ----------------
-
-- name: Download Windows Admin Center Virtualization Mode installer
+- name: Download Visual C++ Redistributable (x64)
   ansible.windows.win_get_url:
-    url: "{{ wac_virtualization_installer_url }}"
-    dest: C:\Temp\WindowsAdminCenterVirtualization.msi
+    url: https://aka.ms/vs/17/release/vc_redist.x64.exe
+    dest: C:\Temp\vc_redist.x64.exe
 
-# --- Install WAC Virtualization Mode --------------------------
-
-- name: Install Windows Admin Center Virtualization Mode (silent)
+- name: Install Visual C++ Redistributable (silent)
   ansible.windows.win_shell: |
-    msiexec /i C:\Temp\WindowsAdminCenterVirtualization.msi `
-      /qn `
-      SME_PORT=6516 `
-      SSL_CERTIFICATE_OPTION=generate `
-      POSTGRES_USERNAME={{ wac_pg_user }} `
-      POSTGRES_PASSWORD={{ wac_pg_password }} `
-      POSTGRES_PORT={{ wac_pg_port }}
+    Start-Process -FilePath C:\Temp\vc_redist.x64.exe -ArgumentList "/install /quiet /norestart" -Wait
+  args:
+    creates: C:\Windows\System32\vcruntime140.dll
