@@ -1,21 +1,57 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
 ludus:
-  range:
-    name: ludus-wac
-    network:
-      cidr: 10.2.0.0/16
+  - vm_name: "{{ range_id }}-wac-dc01"
+    hostname: "WAC-DC01"
+    template: win2025-server-x64-tpm
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.local
+      role: primary-dc
+    roles:
+      - ludus_wac_common
+      - ludus_wac_dc
+    role_vars:
+      wac_domain_fqdn: ludus.local
+      wac_domain_netbios: LUDUS
+      wac_safe_mode_password: Password123!
 
-  machines:
-    - name: dc01
-      template: win2025-server-x64-tpm
-      ip: 10.2.10.10
-      roles: [dc]
+  - vm_name: "{{ range_id }}-wac-wac01"
+    hostname: "WAC-WAC01"
+    template: win2025-server-x64-tpm
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.local
+      role: member
+    roles:
+      - ludus_wac_common
+      - ludus_wac_wac
 
-    - name: wac01
-      template: win2025-server-x64-tpm
-      ip: 10.2.10.11
-      roles: [wac]
-
-    - name: hv01
-      template: win2025-server-x64-tpm
-      ip: 10.2.10.21
-      roles: [hyperv]
+  - vm_name: "{{ range_id }}-wac-hv01"
+    hostname: "WAC-HV01"
+    template: win2025-server-x64-tpm
+    vlan: 10
+    ip_last_octet: 21
+    ram_gb: 12
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.local
+      role: member
+    roles:
+      - ludus_wac_common
+      - ludus_wac_hyperv
+    role_vars:
+      hv_vswitch_name: vSwitch
+      hv_vswitch_adapter_name: Ethernet
