@@ -1,8 +1,0 @@
-- name: Install VC++ Redistributable
-  ansible.windows.win_shell: |
-    winget install Microsoft.VCRedist.2015+.x64 --silent
-
-- name: Install Windows Admin Center vMode
-  ansible.windows.win_shell: |
-    Start-Process -Wait msiexec.exe -ArgumentList `
-      "/i C:\Installers\WAC-vMode.msi /qn"

@@ -1,0 +1,30 @@
+- name: Install Hyper-V + required host features for WAC Virtualization Mode
+  ansible.windows.win_feature:
+    name:
+      - Hyper-V
+      - Failover-Clustering
+      - NetworkATC
+      - Data-Center-Bridging
+    state: present
+    include_management_tools: true
+  register: hv_features
+
+- name: Ensure WinRM service is running
+  ansible.windows.win_service:
+    name: WinRM
+    start_mode: auto
+    state: started
+
+# WAC VM Mode needs these inbound rules enabled on the host:
+# - Windows Remote Management
+# - File and Printer Sharing (SMB-In) (only needed for agent install; you can disable later)
+- name: Enable firewall rules required by WAC VM Mode (WinRM + SMB-In)
+  ansible.windows.win_shell: |
+    Enable-NetFirewallRule -DisplayGroup "Windows Remote Management"
+    Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
+  changed_when: false
+
+- name: Reboot if required
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  when: hv_features.reboot_required | default(false)

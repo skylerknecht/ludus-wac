@@ -1,68 +1,51 @@
-# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
-
 ludus:
-  - vm_name: "{{ range_id }}-wac-dc01"
-    hostname: "WAC-DC01"
+  - vm_name: "{{ range_id }}-DC01"
+    hostname: "DC01"
     template: win2025-server-x64-tpm-template
     vlan: 10
     ip_last_octet: 10
-    ram_gb: 8
-    cpus: 4
+    ram_gb: 4
+    ram_min_gb: 1
+    cpus: 2
     windows:
       sysprep: true
     domain:
-      fqdn: ludus.local
+      fqdn: ludus.domain
       role: primary-dc
     roles:
-      - ludus_wac_common
-      - ludus_wac_dc
-    role_vars:
-      wac_domain_fqdn: ludus.local
-      wac_domain_netbios: LUDUS
-      wac_safe_mode_password: "Password123!"
+      - disable_firewall
+      - dc01
 
-  - vm_name: "{{ range_id }}-wac-wac01"
-    hostname: "WAC-WAC01"
+  - vm_name: "{{ range_id }}-HV01"
+    hostname: "HV01"
     template: win2025-server-x64-tpm-template
     vlan: 10
     ip_last_octet: 11
-    ram_gb: 8
-    cpus: 4
+    ram_gb: 16
+    ram_min_gb: 4
+    cpus: 8
     windows:
       sysprep: true
     domain:
-      fqdn: ludus.local
+      fqdn: ludus.domain
       role: member
     roles:
-      - ludus_wac_common
-      - ludus_wac_join_domain
-      - ludus_wac_wac
-    role_vars:
-      dc_fqdn: "WAC-DC01.ludus.local"
-      domain_fqdn: "ludus.local"
-      domain_join_user: "LUDUS\\Administrator"
-      domain_join_password: "Password123!"
+      - disable_firewall
+      - hyperv
 
-  - vm_name: "{{ range_id }}-wac-hv01"
-    hostname: "WAC-HV01"
+  - vm_name: "{{ range_id }}-WAC01"
+    hostname: "WAC01"
     template: win2025-server-x64-tpm-template
     vlan: 10
-    ip_last_octet: 21
-    ram_gb: 12
+    ip_last_octet: 12
+    ram_gb: 8
+    ram_min_gb: 2
     cpus: 4
     windows:
       sysprep: true
     domain:
-      fqdn: ludus.local
+      fqdn: ludus.domain
       role: member
     roles:
-      - ludus_wac_common
-      - ludus_wac_join_domain
-      - ludus_wac_hyperv
-    role_vars:
-      dc_fqdn: "WAC-DC01.ludus.local"
-      domain_fqdn: "ludus.local"
-      domain_join_user: "LUDUS\\Administrator"
-      domain_join_password: "Password123!"
-      hv_vswitch_name: "vSwitch"
-      hv_vswitch_adapter_name: "Ethernet"
+      - disable_firewall
+      - wac01
