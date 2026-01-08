@@ -1,1 +1,0 @@
-Install-WindowsFeature Hyper-V -IncludeManagementTools -Restart

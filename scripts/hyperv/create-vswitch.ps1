@@ -1,10 +1,1 @@
-param(
-  [string]$Name = "vSwitch"
-)
-
-# Internal is easiest for nested/lab. External is fine too, but requires real uplink.
-if (-not (Get-VMSwitch -Name $Name -ErrorAction SilentlyContinue)) {
-  New-VMSwitch -Name $Name -SwitchType Internal | Out-Null
-}
-
-Get-VMSwitch -Name $Name | Format-List Name,SwitchType
+New-VMSwitch -Name "vSwitch" -NetAdapterName (Get-NetAdapter | Where-Object Status -eq Up | Select-Object -First 1).Name -AllowManagementOS $true

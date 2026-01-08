@@ -1,57 +1,20 @@
-# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+range:
+  name: ludus-wac
+  network:
+    cidr: 10.2.0.0/16
 
-ludus:
-  # Domain Controller (Ludus promotes this)
-  - vm_name: "{{ range_id }}-dc01"
-    hostname: DC01
-    template: win2025-server-x64-tpm-template
-    vlan: 10
-    ip_last_octet: 10
-    cpus: 4
-    ram_gb: 8
-    windows:
-      sysprep: false
-    domain:
-      fqdn: lab.local
-      role: primary-dc
+machines:
+  - name: dc01
+    template: win2025-server-x64-tpm
+    ip: 10.2.10.10
+    roles: [dc]
 
-  # Hyper-V Hosts (domain joined by Ludus)
-  - vm_name: "{{ range_id }}-hv01"
-    hostname: HV01
-    template: win2025-server-x64-tpm-template
-    vlan: 10
-    ip_last_octet: 21
-    cpus: 8
-    ram_gb: 16
-    windows:
-      sysprep: false
-    domain:
-      fqdn: lab.local
-      role: member
+  - name: wac01
+    template: win2025-server-x64-tpm
+    ip: 10.2.10.11
+    roles: [wac]
 
-  - vm_name: "{{ range_id }}-hv02"
-    hostname: HV02
-    template: win2025-server-x64-tpm-template
-    vlan: 10
-    ip_last_octet: 22
-    cpus: 8
-    ram_gb: 16
-    windows:
-      sysprep: false
-    domain:
-      fqdn: lab.local
-      role: member
-
-  # WAC Gateway (domain joined by Ludus)
-  - vm_name: "{{ range_id }}-wac01"
-    hostname: WAC01
-    template: win2025-server-x64-tpm-template
-    vlan: 10
-    ip_last_octet: 30
-    cpus: 4
-    ram_gb: 8
-    windows:
-      sysprep: false
-    domain:
-      fqdn: lab.local
-      role: member
+  - name: hv01
+    template: win2025-server-x64-tpm
+    ip: 10.2.10.21
+    roles: [hyperv]
