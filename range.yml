@@ -15,11 +15,29 @@ ludus:
     roles:
       - disable_firewall
 
+
+  - vm_name: "{{ range_id }}-WAC01"
+    hostname: "WAC01"
+    template: win2025-server-x64-tpm-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 8
+    ram_min_gb: 2
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.domain
+      role: member
+    roles:
+      - disable_firewall
+      - wac01
+
   - vm_name: "{{ range_id }}-HV01"
     hostname: "HV01"
     template: win2025-server-x64-tpm-template
     vlan: 10
-    ip_last_octet: 11
+    ip_last_octet: 12
     ram_gb: 16
     ram_min_gb: 4
     cpus: 8
@@ -36,7 +54,7 @@ ludus:
     hostname: "HV02"
     template: win2025-server-x64-tpm-template
     vlan: 10
-    ip_last_octet: 12
+    ip_last_octet: 13
     ram_gb: 16
     ram_min_gb: 4
     cpus: 8
@@ -48,23 +66,6 @@ ludus:
     roles:
       - disable_firewall
       - hyperv
-
-  - vm_name: "{{ range_id }}-WAC01"
-    hostname: "WAC01"
-    template: win2025-server-x64-tpm-template
-    vlan: 10
-    ip_last_octet: 13
-    ram_gb: 8
-    ram_min_gb: 2
-    cpus: 4
-    windows:
-      sysprep: true
-    domain:
-      fqdn: ludus.domain
-      role: member
-    roles:
-      - disable_firewall
-      - wac01
 
 defaults:
   ad_domain_admin: domainadmin
