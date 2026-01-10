@@ -1,4 +1,4 @@
-- name: Install Hyper-V + required host features for WAC Virtualization Mode
+- name: Install required host features for WAC Virtualization Mode
   ansible.windows.win_feature:
     name:
       - Hyper-V

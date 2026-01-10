@@ -1,5 +1,15 @@
 # --- Prereqs -------------------------------------------------
-
+- name: Install required host features for WAC Virtualization Mode
+  ansible.windows.win_feature:
+    name:
+      - Hyper-V
+      - Failover-Clustering
+      - NetworkATC
+      - Data-Center-Bridging
+    state: present
+    include_management_tools: true
+  register: hv_features
+  
 - name: Ensure temp directory exists
   ansible.windows.win_file:
     path: C:\Temp
