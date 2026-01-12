@@ -27,7 +27,7 @@
 - name: Convert Windows Server to Datacenter (non-interactive)
   ansible.windows.win_shell: |
     echo Y | dism /online /Set-Edition:ServerDatacenter ^
-      /ProductKey:{{ ws2025_datacenter_kms_key }} ^
+      /ProductKey:D764K-2NDRG-47T6Q-P8T8W-YP6DF ^
       /AcceptEula
   args:
     executable: cmd.exe
