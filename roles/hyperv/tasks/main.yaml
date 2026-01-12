@@ -24,11 +24,7 @@
     Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
   changed_when: false
 
-- name: Convert Windows Server to Datacenter
-  ansible.windows.win_shell: >
-    dism /online /Set-Edition:ServerDatacenter /ProductKey:D764K-2NDRG-47T6Q-P8T8W-YP6DF /AcceptEula
-
-
 - name: Reboot if required
   ansible.windows.win_reboot:
     reboot_timeout: 3600
+  when: hv_features.reboot_required | default(false)
